@@ -1,0 +1,31 @@
+services:
+  api_gateway:
+    build: ./http-api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./http-api-gateway/src:/usr/src/app/src
+    command: pnpm run start:dev
+  user-microservice:
+    build: ./user-microservice
+    volumes:
+      - ./user-microservice/src:/usr/src/app/src
+    command: pnpm run start:dev
+  payments-microservice:
+    build: ./payments-microservice
+    volumes:
+      - ./payments-microservice/src:/usr/src/app/src
+    command: pnpm run start:dev
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: microservices
+      MYSQL_USER: root
+      MYSQL_TCP_PORT: 3306
+    ports:
+      - "3306:3306"
